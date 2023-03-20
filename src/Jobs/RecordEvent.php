@@ -8,6 +8,8 @@ use Apiation\ApiationLaravel\Scrambler;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Client\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Queue\InteractsWithQueue;
 
 class RecordEvent
@@ -16,26 +18,21 @@ class RecordEvent
 
     public const URL = 'https://apiation.io/api/v1/record';
 
-    public $request;
-
-    public $response;
-
-    public function __construct($request, $response)
+    public function __construct(public Request $request, public JsonResponse $response)
     {
-        $this->request = $request;
-        $this->response = $response;
     }
 
     public function handle(Factory $http)
     {
         $http
-            ->async(config('apiation.async'))
+            ->async((bool) config('apiation.async'))
             ->acceptJson()
-            ->withToken(config('apiation.token'))
+            ->withToken((string) config('apiation.token'))
             ->timeout(5)
             ->retry(2)
             ->post(self::URL, [
-                'path' => $this->request->route()->uri(),
+                'host' => $this->request->httpHost(),
+                'path' => $this->request->route()?->uri(),
                 'method' => $this->request->getMethod(),
                 'status' => $this->response->getStatusCode(),
                 'request' => [
@@ -45,13 +42,12 @@ class RecordEvent
                 ],
                 'response' => [
                     'body' => $this->parse($this->response->getData()),
-                    'headers' => $this->parse($this->response->headers->all()),
                 ],
-                'sample_rate' => config('apiation.sample_rate'),
+                'sample_rate' => (float) config('apiation.sample_rate'),
             ]);
     }
 
-    private function parse($input)
+    private function parse($input) : string
     {
         if(config('apiation.scramble')) {
             $input = Scrambler::scramble($input);

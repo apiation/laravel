@@ -14,7 +14,7 @@ class Scrambler
         return $input;
     }
 
-    private static function scrambleValue(mixed $value)
+    private static function scrambleValue($value)
     {
         if (is_array($value)) {
             foreach ($value as $key => $val) {

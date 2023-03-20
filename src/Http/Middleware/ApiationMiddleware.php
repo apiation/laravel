@@ -21,7 +21,7 @@ class ApiationMiddleware
         /** @var JsonResponse $response */
         $response = $next($request);
 
-        if (! $request->acceptsJson()) {
+        if (! $request->expectsJson()) {
             return $response;
         }
 
