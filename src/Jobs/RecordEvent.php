@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Apiation\ApiationLaravel\Jobs;
 
@@ -11,8 +13,10 @@ class RecordEvent
 {
     use Queueable, Dispatchable, InteractsWithQueue;
 
-    public const URL = "https://apiation.io/api/v1/record";
+    public const URL = 'https://apiation.io/api/v1/record';
+
     public $request;
+
     public $response;
 
     public function __construct($request, $response)
@@ -42,7 +46,7 @@ class RecordEvent
                     'body' => json_encode($this->response->getData()),
                     'headers' => json_encode($this->response->headers->all()),
                 ],
-                'sample_rate' => config('apiation.sample_rate')
+                'sample_rate' => config('apiation.sample_rate'),
             ]);
     }
 }

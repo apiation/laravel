@@ -8,10 +8,10 @@ return [
     'async' => true,
 
     'queue' => null,
-//    'queue' => [
-//        'queue' => '',
-//        'connection' => ''
-//    ],
+    //    'queue' => [
+    //        'queue' => '',
+    //        'connection' => ''
+    //    ],
 
     'sample_rate' => env('APIATION_SAMPLE_RATE', 0.03),
 ];

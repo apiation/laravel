@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Apiation\ApiationLaravel\Http\Middleware;
 
@@ -11,8 +13,7 @@ class ApiationMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -20,15 +21,14 @@ class ApiationMiddleware
         /** @var JsonResponse $response */
         $response = $next($request);
 
-        if(!$request->acceptsJson()){
+        if (! $request->acceptsJson()) {
             return $response;
         }
 
         try {
             ApiationLaravel::record($request, $response);
-        } finally{
+        } finally {
             return $response;
         }
     }
-
 }

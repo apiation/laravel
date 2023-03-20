@@ -7,15 +7,15 @@ use Apiation\ApiationLaravel\Jobs\RecordEvent;
 class ApiationLaravel
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \Illuminate\Http\JsonResponse $response
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\JsonResponse  $response
      */
     public function record($request, $response)
     {
-        if(! $this->shouldRecord()){
+        if (! $this->shouldRecord()) {
             return;
         }
-        if($this->shouldQueue()){
+        if ($this->shouldQueue()) {
             return $this->recordOnQueue($request, $response);
         }
 
@@ -24,10 +24,10 @@ class ApiationLaravel
 
     protected function shouldRecord()
     {
-        $sampleRate = (float) config("apiation.sample_rate");
+        $sampleRate = (float) config('apiation.sample_rate');
+
         return random_int(1, 100) / 100.0 > $sampleRate;
     }
-
 
     protected function shouldQueue()
     {
