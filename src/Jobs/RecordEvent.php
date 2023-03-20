@@ -53,7 +53,7 @@ class RecordEvent
 
     private function parse($input)
     {
-        if(config('apiation.scramble')) {
+        if (config('apiation.scramble')) {
             $input = Scrambler::scramble($input);
         }
 
