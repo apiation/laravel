@@ -2,9 +2,9 @@
 
 namespace Apiation\ApiationLaravel\Tests;
 
+use Apiation\ApiationLaravel\ApiationLaravelServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Apiation\ApiationLaravel\ApiationLaravelServiceProvider;
 
 class TestCase extends Orchestra
 {
