@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Apiation\ApiationLaravel\Jobs;
 
+use Apiation\ApiationLaravel\Scrambler;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Client\Factory;
@@ -38,15 +39,24 @@ class RecordEvent
                 'method' => $this->request->getMethod(),
                 'status' => $this->response->getStatusCode(),
                 'request' => [
-                    'body' => json_encode($this->request->input()),
-                    'headers' => json_encode($this->request->headers->all()),
-                    'query' => json_encode($this->request->query->all()),
+                    'body' => $this->parse($this->request->input()),
+                    'headers' => $this->parse($this->request->headers->all()),
+                    'query' => $this->parse($this->request->query->all()),
                 ],
                 'response' => [
-                    'body' => json_encode($this->response->getData()),
-                    'headers' => json_encode($this->response->headers->all()),
+                    'body' => $this->parse($this->response->getData()),
+                    'headers' => $this->parse($this->response->headers->all()),
                 ],
                 'sample_rate' => config('apiation.sample_rate'),
             ]);
+    }
+
+    private function parse($input)
+    {
+        if(config('apiation.scramble')) {
+            $input = Scrambler::scramble($input);
+        }
+
+        return json_encode($input);
     }
 }
