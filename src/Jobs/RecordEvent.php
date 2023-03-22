@@ -47,7 +47,7 @@ class RecordEvent
             ]);
     }
 
-    private function parse($input) : string
+    private function parse($input): string
     {
         if (config('apiation.scramble')) {
             $input = Scrambler::scramble($input);
